@@ -1,0 +1,6 @@
+{
+  "name": "FluxForge Agro-Enterprise Initiative",
+  "description": "10-acre integrated agribusiness in Saki, Oyo State, Nigeria featuring cocoa, plantain, fishery, on-site feed mill, poultry, and FluxForge Farm OS.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

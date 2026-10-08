@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: fluxforge-agro-enterprise
+    env: node
+    plan: starter
+    region: frankfurt
+    buildCommand: npm install && npm run build
+    startCommand: node dist/app/server/server.mjs
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: fluxforge-agro-postgres
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_EMAIL
+        value: admin@fluxforge.ng
+      - key: ADMIN_PASSWORD
+        sync: false
+
+databases:
+  - name: fluxforge-agro-postgres
+    plan: starter
+    region: frankfurt
+    databaseName: fluxforge_agro
+    user: fluxforge_admin

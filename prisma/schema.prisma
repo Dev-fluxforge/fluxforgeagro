@@ -1,0 +1,128 @@
+// FluxForge Agro-Enterprise Initiative
+// Prisma Schema for PostgreSQL Production Deployments (Railway / Render / Fly.io)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EnterpriseCategory {
+  COCOA_PLANTAIN
+  FISHERY_FEEDMILL
+  POULTRY
+}
+
+enum BatchStage {
+  NURSERY_HATCHERY
+  GROWOUT_BROODING
+  FINISHING_CONDITIONING
+  HARVEST_READY
+  DISTRIBUTED
+}
+
+enum SubmissionStatus {
+  NEW
+  REVIEWED
+  RESPONDED
+}
+
+enum JournalCategory {
+  LAND_SURVEY
+  INFRASTRUCTURE
+  FEED_MILL
+  FARM_OS_TECH
+  COMMUNITY
+}
+
+model JournalPost {
+  id              String          @id @default(cuid())
+  title           String
+  slug            String          @unique
+  category        JournalCategory @default(INFRASTRUCTURE)
+  excerpt         String
+  body            String          @db.Text
+  imageUrl        String?
+  videoUrl        String?
+  author          String          @default("Badmus Muhammad Adeniyi")
+  publishedAt     DateTime        @default(now())
+  readTimeMinutes Int             @default(4)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([category])
+  @@index([publishedAt])
+  @@map("journal_posts")
+}
+
+model ContactSubmission {
+  id           String           @id @default(cuid())
+  name         String
+  email        String
+  organization String?
+  interestType String
+  message      String           @db.Text
+  submittedAt  DateTime         @default(now())
+  status       SubmissionStatus @default(NEW)
+  createdAt    DateTime         @default(now())
+
+  @@index([status])
+  @@map("contact_submissions")
+}
+
+model FeedBatch {
+  id                     String             @id @default(cuid())
+  batchLabel             String             @unique
+  enterprise             EnterpriseCategory
+  specieOrCrop           String
+  origin                 String
+  stage                  BatchStage         @default(NURSERY_HATCHERY)
+  startDate              DateTime           @default(now())
+  targetHarvestDate      DateTime?
+  formulationUsed        String
+  currentFeedCostPerUnit Decimal            @db.Decimal(10, 2)
+  feedConversionRatio    Decimal            @default(1.15) @db.Decimal(4, 2)
+  notes                  String?            @db.Text
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
+
+  costEntries     FeedCostEntry[]
+  traceabilityLogs TraceabilityLog[]
+
+  @@map("feed_batches")
+}
+
+model FeedCostEntry {
+  id                  String   @id @default(cuid())
+  ingredientName      String
+  costPerKg           Decimal  @db.Decimal(10, 2)
+  quantityKg          Decimal  @db.Decimal(10, 2)
+  crudeProteinPercent Decimal  @db.Decimal(5, 2)
+  batchId             String
+  createdAt           DateTime @default(now())
+
+  batch FeedBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  @@index([batchId])
+  @@map("feed_cost_entries")
+}
+
+model TraceabilityLog {
+  id          String   @id @default(cuid())
+  stage       String
+  location    String
+  timestamp   DateTime @default(now())
+  operator    String
+  description String   @db.Text
+  status      String   @default("completed")
+  batchId     String
+  createdAt   DateTime @default(now())
+
+  batch FeedBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  @@index([batchId])
+  @@map("traceability_logs")
+}

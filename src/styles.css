@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import "tailwindcss";
+
+@theme {
+  --color-brand-primary: #1F4D3D;
+  --color-brand-primary-dark: #16392D;
+  --color-brand-primary-light: #2A6853;
+  --color-brand-secondary: #C9A227;
+  --color-brand-secondary-hover: #B5901F;
+  --color-brand-secondary-light: #F4E8C1;
+  --color-brand-tertiary: #4A6670;
+  --color-brand-tertiary-light: #6A8690;
+  --color-brand-bg: #F7F5F0;
+  --color-brand-bg-card: #FFFFFF;
+  --color-brand-text: #1A1A1A;
+  --color-brand-muted: #5B6560;
+  --color-brand-border: #E5E0D5;
+  
+  --font-serif: 'Fraunces', Georgia, serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+:root {
+  --primary: #1F4D3D;
+  --secondary: #C9A227;
+  --tertiary: #4A6670;
+  --bg-warm: #F7F5F0;
+  --text-dark: #1A1A1A;
+  --text-muted: #5B6560;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #F7F5F0;
+  color: #1A1A1A;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, .font-serif {
+  font-family: 'Fraunces', Georgia, serif;
+}
+
+/* Material icons styling */
+.mat-icon {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  vertical-align: middle;
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F7F5F0;
+}
+::-webkit-scrollbar-thumb {
+  background: #C4C0B6;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4A6670;
+}
