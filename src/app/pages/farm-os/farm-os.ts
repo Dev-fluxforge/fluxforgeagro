@@ -4,11 +4,12 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { Api } from '../../core/services/api';
 import { FeedBatch, FeedFormulaCalculation, IngredientInput } from '../../core/models/types';
+import { FarmOsDashboard } from './components/dashboard/dashboard';
 
 @Component({
   selector: 'app-farm-os',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, RouterLink, MatIconModule],
+  imports: [ReactiveFormsModule, RouterLink, MatIconModule, FarmOsDashboard],
   template: `
     <div class="space-y-10 lg:space-y-12 py-8 pb-24">
       
@@ -103,159 +104,15 @@ import { FeedBatch, FeedFormulaCalculation, IngredientInput } from '../../core/m
         </div>
       </section>
 
-      <!-- TAB 1: OPERATIONAL DASHBOARD -->
+      <!-- TAB 1: CENTRALIZED OPERATIONAL DASHBOARD -->
       @if (activeTab() === 'dashboard') {
-        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          
-          <!-- Key Metric Cards Strip -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            
-            <!-- Card 1 -->
-            <div class="bg-white rounded-2xl p-5 border border-[#E5E0D5] shadow-sm space-y-2">
-              <div class="flex items-center justify-between text-xs text-[#5B6560]">
-                <span>Active Estate Batches</span>
-                <mat-icon class="mat-icon text-sm text-[#1F4D3D]">category</mat-icon>
-              </div>
-              <div class="font-serif text-3xl font-extrabold text-[#1F4D3D]">
-                {{ api.batches().length }} Batches
-              </div>
-              <p class="text-[11px] text-[#5B6560]">Catfish, Broilers &amp; Hybrid Cocoa</p>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="bg-white rounded-2xl p-5 border border-[#E5E0D5] shadow-sm space-y-2">
-              <div class="flex items-center justify-between text-xs text-[#5B6560]">
-                <span>Avg Farm-Formulated Feed</span>
-                <mat-icon class="mat-icon text-sm text-[#C9A227]">payments</mat-icon>
-              </div>
-              <div class="font-serif text-3xl font-extrabold text-[#1F4D3D]">
-                ₦1,045 <span class="text-xs font-normal text-[#5B6560]">/ kg</span>
-              </div>
-              <p class="text-[11px] text-emerald-700 font-semibold">vs ₦1,850/kg imported commercial pellets</p>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="bg-white rounded-2xl p-5 border border-[#E5E0D5] shadow-sm space-y-2">
-              <div class="flex items-center justify-between text-xs text-[#5B6560]">
-                <span>Calculated Cost Savings</span>
-                <mat-icon class="mat-icon text-sm text-emerald-600">trending_down</mat-icon>
-              </div>
-              <div class="font-serif text-3xl font-extrabold text-[#C9A227]">
-                43.5%
-              </div>
-              <p class="text-[11px] text-[#5B6560]">Saving ₦805 on every kg fed</p>
-            </div>
-
-            <!-- Card 4 -->
-            <div class="bg-white rounded-2xl p-5 border border-[#E5E0D5] shadow-sm space-y-2">
-              <div class="flex items-center justify-between text-xs text-[#5B6560]">
-                <span>Projected Biomass Cycle</span>
-                <mat-icon class="mat-icon text-sm text-[#4A6670]">scale</mat-icon>
-              </div>
-              <div class="font-serif text-3xl font-extrabold text-[#1A1A1A]">
-                8,400 <span class="text-xs font-normal text-[#5B6560]">kg</span>
-              </div>
-              <p class="text-[11px] text-[#5B6560]">Mean FCR: 1.15 catfish / 1.62 poultry</p>
-            </div>
-
-          </div>
-
-          <!-- Trend Chart & Economics Comparison -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
-            <!-- Feed Cost Comparison Visualizer -->
-            <div class="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 border border-[#E5E0D5] shadow-sm space-y-6">
-              <div class="flex items-center justify-between pb-4 border-b border-[#E5E0D5]">
-                <div>
-                  <h3 class="font-serif text-lg font-bold text-[#1F4D3D]">Feed Expenditure Comparative Benchmark</h3>
-                  <p class="text-xs text-[#5B6560]">Cost breakdown per 1,000 kg (1 Tonne) feed production in Saki</p>
-                </div>
-                <span class="text-xs font-mono font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-md">
-                  ₦805,000 / Tonne Saved
-                </span>
-              </div>
-
-              <!-- Bar 1: Imported Commercial Pellets -->
-              <div class="space-y-1.5">
-                <div class="flex justify-between text-xs">
-                  <span class="font-medium text-[#1A1A1A]">Imported Commercial Catfish Pellets (42% CP)</span>
-                  <span class="font-bold text-red-800">₦1,850,000 / Tonne (₦1,850/kg)</span>
-                </div>
-                <div class="w-full h-8 bg-red-100 rounded-lg overflow-hidden flex">
-                  <div class="w-full bg-red-700/80 h-full flex items-center px-3 text-[11px] font-bold text-white">
-                    100% Benchmark Cost (High FX Exposure)
-                  </div>
-                </div>
-              </div>
-
-              <!-- Bar 2: FluxForge On-Site Extruded Pellets -->
-              <div class="space-y-1.5 pt-2">
-                <div class="flex justify-between text-xs">
-                  <span class="font-medium text-[#1A1A1A]">FluxForge Saki Extruded Pellets (42% CP)</span>
-                  <span class="font-bold text-[#1F4D3D]">₦1,045,000 / Tonne (₦1,045/kg)</span>
-                </div>
-                <div class="w-full h-8 bg-[#1F4D3D]/10 rounded-lg overflow-hidden flex">
-                  <div class="w-[56.5%] bg-[#1F4D3D] h-full flex items-center px-3 text-[11px] font-bold text-[#C9A227]">
-                    56.5% Net Cost (₦1,045/kg)
-                  </div>
-                  <div class="w-[43.5%] bg-[#C9A227] h-full flex items-center justify-center text-[11px] font-bold text-[#1F4D3D]">
-                    43.5% Retained Margin
-                  </div>
-                </div>
-              </div>
-
-              <div class="p-4 bg-[#F7F5F0] rounded-2xl border border-[#E5E0D5] text-xs text-[#5B6560] leading-relaxed">
-                <span class="font-bold text-[#1F4D3D]">Algorithmic Advantage:</span> By using local plantain peel meal (from our 5-acre plantation) and Saki smallholder yellow maize, the on-site extruder eliminates distributor markups, import duties, and interstate haulage expenses.
-              </div>
-            </div>
-
-            <!-- Active Production Overview Card -->
-            <div class="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-[#E5E0D5] shadow-sm space-y-6">
-              <div class="flex items-center justify-between pb-4 border-b border-[#E5E0D5]">
-                <h3 class="font-serif text-lg font-bold text-[#1F4D3D]">Current Cycle Status</h3>
-                <span class="text-xs text-[#5B6560]">Saki Field Station</span>
-              </div>
-
-              <div class="space-y-4 text-xs">
-                <div class="p-3.5 bg-[#F7F5F0] rounded-xl border border-[#E5E0D5] space-y-1">
-                  <div class="flex justify-between">
-                    <span class="font-semibold text-[#1A1A1A]">Pond 2 (Catfish Growout)</span>
-                    <span class="text-[#1F4D3D] font-bold">FF-2026-CAT-001</span>
-                  </div>
-                  <p class="text-[#5B6560]">Biomass sample 385g · FCR 1.15 · Target Harvest Dec 2026</p>
-                </div>
-
-                <div class="p-3.5 bg-[#F7F5F0] rounded-xl border border-[#E5E0D5] space-y-1">
-                  <div class="flex justify-between">
-                    <span class="font-semibold text-[#1A1A1A]">Brooding Pen 1 (Broilers)</span>
-                    <span class="text-[#1F4D3D] font-bold">FF-2026-PLT-001</span>
-                  </div>
-                  <p class="text-[#5B6560]">Finisher phase · Sawdust deep litter · 1,200 birds</p>
-                </div>
-
-                <div class="p-3.5 bg-[#F7F5F0] rounded-xl border border-[#E5E0D5] space-y-1">
-                  <div class="flex justify-between">
-                    <span class="font-semibold text-[#1A1A1A]">Shaded Nursery (Cocoa/Plantain)</span>
-                    <span class="text-[#1F4D3D] font-bold">FF-2026-COC-001</span>
-                  </div>
-                  <p class="text-[#5B6560]">6,200 CRIN hybrid seedlings potted with organic compost</p>
-                </div>
-              </div>
-
-              <div class="pt-2">
-                <button
-                  type="button"
-                  (click)="activeTab.set('calculator')"
-                  class="w-full py-2.5 px-4 bg-[#1F4D3D] hover:bg-[#16392D] text-white text-xs font-semibold rounded-xl transition-colors flex items-center justify-center gap-2"
-                >
-                  <mat-icon class="mat-icon text-sm text-[#C9A227]">add_circle</mat-icon>
-                  <span>Formulate New Feed Mix</span>
-                </button>
-              </div>
-            </div>
-
-          </div>
-
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <app-farm-os-dashboard
+            [batches]="api.batches()"
+            [summary]="api.summary()"
+            (selectTab)="onSwitchTab($event)"
+            (inspectBatch)="onInspectBatchFromDashboard($event)"
+          />
         </section>
       }
 
@@ -735,7 +592,8 @@ export class FarmOs implements OnInit {
   saveSuccessMessage = signal<string | null>(null);
 
   ngOnInit(): void {
-    // Initial fetch of batches
+    // Initial fetch of batches and summary
+    this.api.getFarmOSSummary().subscribe();
     this.api.getBatches().subscribe((batches) => {
       if (batches.length > 0 && !this.activeBatch()) {
         this.activeBatch.set(batches[0]);
@@ -874,5 +732,14 @@ export class FarmOs implements OnInit {
     this.api.getBatch(query).subscribe((found) => {
       this.activeBatch.set(found);
     });
+  }
+
+  onSwitchTab(tab: 'dashboard' | 'calculator' | 'traceability' | 'batches'): void {
+    this.activeTab.set(tab);
+  }
+
+  onInspectBatchFromDashboard(batchLabel: string): void {
+    this.performLookup(batchLabel);
+    this.activeTab.set('traceability');
   }
 }
